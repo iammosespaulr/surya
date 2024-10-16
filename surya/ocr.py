@@ -99,7 +99,6 @@ def run_ocr(images: List[Image.Image], langs: List[List[str] | None], det_model,
             lines.append(TextLine(
                 text=text_line,
                 polygon=bbox.polygon,
-                bbox=bbox.bbox,
                 confidence=confidence
             ))
 
