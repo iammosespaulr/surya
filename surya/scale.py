@@ -8,7 +8,7 @@ from surya.input.processing import convert_if_not_rgb
 
 FONT_SIZES = np.exp(np.linspace(np.log(settings.SCALE_MIN_FONT_SIZE), np.log(settings.SCALE_MAX_FONT_SIZE), settings.SCALE_NUM_BUCKETS))
 TRANSFORMS = transforms.Compose(
-    [transforms.Resize((768, 768)), transforms.ToTensor()]
+    [transforms.Resize((settings.SCALE_MODEL_IMAGE_SIZE["width"], settings.SCALE_MODEL_IMAGE_SIZE["height"])), transforms.ToTensor()]
 )
 
 

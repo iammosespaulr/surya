@@ -81,6 +81,7 @@ class Settings(BaseSettings):
     TABLE_REC_BENCH_DATASET_NAME: str = "vikp/fintabnet_bench"
 
     SCALE_MODEL_CHECKPOINT: str = "iammosespaulr/scale"
+    SCALE_MODEL_IMAGE_SIZE: Dict = {"height": 768, "width": 768}
     SCALE_NUM_BUCKETS: int = 30
     SCALE_MIN_FONT_SIZE: float = 10
     SCALE_MAX_FONT_SIZE: float = 200
