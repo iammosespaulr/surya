@@ -82,8 +82,10 @@ class Settings(BaseSettings):
 
     SCALE_MODEL_CHECKPOINT: str = "iammosespaulr/scale"
     SCALE_NUM_BUCKETS: int = 30
-    SCALE_MIN_FONT_SIZE: int = 10
-    SCALE_MAX_FONT_SIZE: int = 200
+    SCALE_MIN_FONT_SIZE: float = 10
+    SCALE_MAX_FONT_SIZE: float = 200
+    SCALE_TARGET_FONT_SIZE: float = 30
+    SCALE_BATCH_SIZE: Optional[int] = None
 
     # Tesseract (for benchmarks only)
     TESSDATA_PREFIX: Optional[str] = None

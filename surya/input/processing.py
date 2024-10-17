@@ -57,7 +57,7 @@ def prepare_image_detection(img, processor):
 
     # This double resize actually necessary for downstream accuracy
     img.thumbnail(new_size, Image.Resampling.LANCZOS)
-    img = img.resize(new_size, Image.Resampling.LANCZOS) # Stretch smaller dimension to fit new size
+    img = img.resize(new_size, Image.Resampling.LANCZOS)  # Stretch smaller dimension to fit new size
 
     img = np.asarray(img, dtype=np.uint8)
     img = processor(img)["pixel_values"][0]
@@ -98,7 +98,7 @@ def slice_polys_from_image(image: Image.Image, polys):
     return lines
 
 
-def slice_and_pad_poly(image_array: np.array, coordinates):
+def slice_and_pad_poly(image_array: np.ndarray, coordinates):
     # Draw polygon onto mask
     coordinates = [(corner[0], corner[1]) for corner in coordinates]
     bbox = [min([x[0] for x in coordinates]), min([x[1] for x in coordinates]), max([x[0] for x in coordinates]), max([x[1] for x in coordinates])]
@@ -116,3 +116,23 @@ def slice_and_pad_poly(image_array: np.array, coordinates):
     rectangle_image = Image.fromarray(cropped_polygon)
 
     return rectangle_image
+
+
+def rescale_image(image: Image.Image, current_font_size: float, target_font_size=settings.SCALE_TARGET_FONT_SIZE):
+    scale_factor = target_font_size / current_font_size
+    print(f"{scale_factor=}")
+    image_array = np.array(image)
+    height, width = image_array.shape[:2]
+
+    new_width = int(width * scale_factor)
+    new_height = int(height * scale_factor)
+
+    if scale_factor < 1:  # Shrinking
+        interpolation_method = cv2.INTER_AREA
+    else:  # Enlarging
+        interpolation_method = cv2.INTER_LINEAR
+
+    resized_image_array = cv2.resize(image_array, (new_width, new_height), interpolation=interpolation_method)
+    resized_pil_image = Image.fromarray(resized_image_array)
+
+    return resized_pil_image
