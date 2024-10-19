@@ -7,7 +7,8 @@ from surya.benchmark.bbox import get_pdf_lines
 from surya.benchmark.metrics import precision_recall
 from surya.benchmark.tesseract import tesseract_parallel
 from surya.model.detection.model import load_model, load_processor
-from surya.input.processing import open_pdf, get_page_images, convert_if_not_rgb
+from surya.model.scale.model import load_model as load_scale_model
+from surya.input.processing import open_pdf, get_page_images, convert_if_not_rgb, rescale_image
 from surya.detection import batch_text_detection
 from surya.postprocessing.heatmap import draw_polys_on_image
 from surya.postprocessing.util import rescale_bbox
@@ -16,6 +17,7 @@ import os
 import time
 from tabulate import tabulate
 import datasets
+from surya.scale import get_scale_batch
 
 
 def main():
@@ -28,6 +30,7 @@ def main():
     args = parser.parse_args()
 
     model = load_model()
+    scale_model = load_scale_model()
     processor = load_processor()
 
     if args.pdf_path is not None:
@@ -48,11 +51,23 @@ def main():
         dataset = datasets.load_dataset(settings.DETECTOR_BENCH_DATASET_NAME, split=f"train[:{args.max}]")
         images = list(dataset["image"])
         images = convert_if_not_rgb(images)
+
+        scales = get_scale_batch(images, scale_model)
+        images = [rescale_image(image, scale) for image, scale in zip(images, scales)]
+
         correct_boxes = []
         for i, boxes in enumerate(dataset["bboxes"]):
             img_size = images[i].size
             # 1000,1000 is bbox size for doclaynet
             correct_boxes.append([rescale_bbox(b, (1000, 1000), img_size) for b in boxes])
+
+    # print statistics on the image dimensions, like avg height, avg width, max height, min height, max width, min width
+    print("Max height: ", max([image.size[1] for image in images]))
+    print("Min height: ", min([image.size[1] for image in images]))
+    print("Max width: ", max([image.size[0] for image in images]))
+    print("Min width: ", min([image.size[0] for image in images]))
+    print("Avg height: ", sum([image.size[1] for image in images]) / len(images))
+    print("Avg width: ", sum([image.size[0] for image in images]) / len(images))
 
     start = time.time()
     predictions = batch_text_detection(images, model, processor)

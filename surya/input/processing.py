@@ -120,6 +120,7 @@ def slice_and_pad_poly(image_array: np.ndarray, coordinates):
 
 def rescale_image(image: Image.Image, current_font_size: float, target_font_size=settings.SCALE_TARGET_FONT_SIZE):
     scale_factor = target_font_size / current_font_size
+
     print(f"{scale_factor=}")
     image_array = np.array(image)
     height, width = image_array.shape[:2]
@@ -127,9 +128,9 @@ def rescale_image(image: Image.Image, current_font_size: float, target_font_size
     new_width = int(width * scale_factor)
     new_height = int(height * scale_factor)
 
-    if scale_factor < 1:  # Shrinking
+    if scale_factor < 1:
         interpolation_method = cv2.INTER_AREA
-    else:  # Enlarging
+    else:
         interpolation_method = cv2.INTER_LINEAR
 
     resized_image_array = cv2.resize(image_array, (new_width, new_height), interpolation=interpolation_method)

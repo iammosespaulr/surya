@@ -10,10 +10,10 @@ import os
 class Settings(BaseSettings):
     # General
     TORCH_DEVICE: Optional[str] = None
-    IMAGE_DPI: int = 96 # Used for detection, layout, reading order
+    IMAGE_DPI: int = 96  # Used for detection, layout, reading order
     IMAGE_DPI_HIGHRES: int = 192  # Used for OCR, table rec
-    IN_STREAMLIT: bool = False # Whether we're running in streamlit
-    ENABLE_EFFICIENT_ATTENTION: bool = True # Usually keep True, but if you get CUDA errors, setting to False can help
+    IN_STREAMLIT: bool = False  # Whether we're running in streamlit
+    ENABLE_EFFICIENT_ATTENTION: bool = True  # Usually keep True, but if you get CUDA errors, setting to False can help
 
     # Paths
     DATA_DIR: str = "data"
@@ -35,19 +35,19 @@ class Settings(BaseSettings):
         return "cpu"
 
     # Text detection
-    DETECTOR_BATCH_SIZE: Optional[int] = None # Defaults to 2 for CPU/MPS, 32 otherwise
+    DETECTOR_BATCH_SIZE: Optional[int] = None  # Defaults to 2 for CPU/MPS, 32 otherwise
     DETECTOR_MODEL_CHECKPOINT: str = "vikp/surya_det3"
     DETECTOR_BENCH_DATASET_NAME: str = "vikp/doclaynet_bench"
-    DETECTOR_IMAGE_CHUNK_HEIGHT: int = 1400 # Height at which to slice images vertically
-    DETECTOR_TEXT_THRESHOLD: float = 0.6 # Threshold for text detection (above this is considered text)
-    DETECTOR_BLANK_THRESHOLD: float = 0.35 # Threshold for blank space (below this is considered blank)
-    DETECTOR_POSTPROCESSING_CPU_WORKERS: int = min(8, os.cpu_count()) # Number of workers for postprocessing
-    DETECTOR_MIN_PARALLEL_THRESH: int = 3 # Minimum number of images before we parallelize
+    DETECTOR_IMAGE_CHUNK_HEIGHT: int = 1400  # Height at which to slice images vertically
+    DETECTOR_TEXT_THRESHOLD: float = 0.6  # Threshold for text detection (above this is considered text)
+    DETECTOR_BLANK_THRESHOLD: float = 0.35  # Threshold for blank space (below this is considered blank)
+    DETECTOR_POSTPROCESSING_CPU_WORKERS: int = min(8, os.cpu_count())  # Number of workers for postprocessing
+    DETECTOR_MIN_PARALLEL_THRESH: int = 3  # Minimum number of images before we parallelize
 
     # Text recognition
     RECOGNITION_MODEL_CHECKPOINT: str = "vikp/surya_rec2"
     RECOGNITION_MAX_TOKENS: int = 175
-    RECOGNITION_BATCH_SIZE: Optional[int] = None # Defaults to 8 for CPU/MPS, 256 otherwise
+    RECOGNITION_BATCH_SIZE: Optional[int] = None  # Defaults to 8 for CPU/MPS, 256 otherwise
     RECOGNITION_IMAGE_SIZE: Dict = {"height": 256, "width": 896}
     RECOGNITION_RENDER_FONTS: Dict[str, str] = {
         "all": os.path.join(FONT_DIR, "GoNotoCurrent-Regular.ttf"),
@@ -57,9 +57,9 @@ class Settings(BaseSettings):
     }
     RECOGNITION_FONT_DL_BASE: str = "https://github.com/satbyy/go-noto-universal/releases/download/v7.0"
     RECOGNITION_BENCH_DATASET_NAME: str = "vikp/rec_bench"
-    RECOGNITION_PAD_VALUE: int = 255 # Should be 0 or 255
-    RECOGNITION_STATIC_CACHE: bool = False # Static cache for torch compile
-    RECOGNITION_ENCODER_BATCH_DIVISOR: int = 2 # Divisor for batch size in decoder
+    RECOGNITION_PAD_VALUE: int = 255  # Should be 0 or 255
+    RECOGNITION_STATIC_CACHE: bool = False  # Static cache for torch compile
+    RECOGNITION_ENCODER_BATCH_DIVISOR: int = 2  # Divisor for batch size in decoder
 
     # Layout
     LAYOUT_MODEL_CHECKPOINT: str = "vikp/surya_layout3"
@@ -81,11 +81,11 @@ class Settings(BaseSettings):
     TABLE_REC_BENCH_DATASET_NAME: str = "vikp/fintabnet_bench"
 
     SCALE_MODEL_CHECKPOINT: str = "iammosespaulr/scale"
-    SCALE_MODEL_IMAGE_SIZE: Dict = {"height": 768, "width": 768}
-    SCALE_NUM_BUCKETS: int = 30
-    SCALE_MIN_FONT_SIZE: float = 10
-    SCALE_MAX_FONT_SIZE: float = 200
-    SCALE_TARGET_FONT_SIZE: float = 30
+    SCALE_MODEL_IMAGE_SIZE: Dict = {"height": 896, "width": 896}
+    SCALE_NUM_BUCKETS: int = 40
+    SCALE_MIN_FONT_SIZE: float = 1
+    SCALE_MAX_FONT_SIZE: float = 100
+    SCALE_TARGET_FONT_SIZE: float = 10
     SCALE_BATCH_SIZE: Optional[int] = None
 
     # Tesseract (for benchmarks only)
